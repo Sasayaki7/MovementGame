@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Movement Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<h2>Hello OpenCV.js</h2>
+<p id="status">OpenCV.js is loading...</p>
+
+<div>
+    <button class="btn btn-primary invisible" onclick="onStart()">Start</button>
+    <video id="videoInput" style="display: none;" width="640" height = "480"></video>
+    <div class="inputoutput">
+        <canvas id="canvasOutput" ></canvas>
+        <div class="caption">canvasOutput</div>
+    </div>
+</div>
+
+<script src="webcam_detection.js"></script>
+<script async src="opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+</body>
+</html>

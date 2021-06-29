@@ -1,0 +1,35 @@
+.container{
+    display: flex;
+}
+
+
+.left-column{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.left-column form{
+    display: flex;
+    flex-direction: column;
+}
+
+.right-column{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.right-column form{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.invalid{
+    color: red;
+}
+
+.invisible{
+    display: none;
+}
