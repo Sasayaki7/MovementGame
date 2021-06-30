@@ -51,6 +51,19 @@ class User:
         return connectToMySQL(cls.__db).query_db(query, data)
 
 
+    @classmethod
+    def get_user_and_highscores(cls, id):
+        query = 'SELECT * FROM users '\
+            'LEFT JOIN settings ON users.id = scores.user_id '\
+            'WHERE users.id=%(id)s;'
+        results = connectToMySQL(cls.__db).query_db(query, {'id': id})
+        if len(results) > 0:
+            user = User(results[0])
+            for row in results:
+                user.scores.append(scores.Score(scores.Score.clean_scores_data(row)))
+            return user
+        else:
+            return None
 
 
     @classmethod

@@ -10,6 +10,7 @@ class Song:
         self.id = data['id']
         self.name = data['name']
         self.url = data['url']
+        self.duration = data['duration']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         self.high_scores = []
@@ -44,6 +45,18 @@ class Song:
             for row in result:
                 song.high_scores.append(scores.Score(scores.Score.clean_scores_data(row)))
             return song
+
+
+    @classmethod
+    def get_high_score_for_song_json(cls, songid):
+        query = 'SELECT * FROM scores '\
+            'LEFT JOIN songs ON scores.song_id = songs.id '\
+            'WHERE songs.id = %(songid)s '\
+            'ORDER BY scores.score DESC '\
+            'LIMIT 10;'
+        result = connectToMySQL(cls.__db).query_db(query, {'songid': songid})
+        return result
+
 
 
     @classmethod

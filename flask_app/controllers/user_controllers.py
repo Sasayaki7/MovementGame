@@ -33,7 +33,7 @@ def add_user():
         user_info = User.get_user(id)
         session.clear()
         session['uuid'] = id 
-        return redirect('/game')
+        return redirect('/play')
     else:
         return redirect('/')
 

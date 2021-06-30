@@ -2,7 +2,7 @@
 class Square{
     static allSquares = [];
     static mSize = [80, 80];
-    static tickerLimit = 30;
+    static tickerLimit = 7;
 
     constructor(position, size, color, growthFactor){
         this.position = [position[0]+parseInt(Square.mSize[0]/2), position[1]+parseInt(Square.mSize[1]/2)];
@@ -332,8 +332,8 @@ function onOpenCvReady(){
         if (s.isRunning()){
             let square = s.getNext()
             if (square){
-                let x = parseInt(Math.random()*650);
-                let y  = parseInt(Math.random()*300);
+                let x = parseInt(square.position[0]);
+                let y = parseInt(square.position[1]);
                 new Square([x, y], [0, 0], [255, 255, 255, 0], 4)
             }
         }
@@ -349,7 +349,7 @@ function onOpenCvReady(){
         //Drawing all the squares and checking if any of the squares intersected with the hand
         for (square of all_square_copy){
             square.updateSquare();
-            cv.rectangle(background, new cv.Point(square.position[0], square.position[1]), new cv.Point(square.position[0]+square.size[0], square.position[1]+square.size[1]), [0, 0,255, 255], parseInt(square.size[0]/3));
+            cv.rectangle(background, new cv.Point(square.position[0], square.position[1]), new cv.Point(square.position[0]+square.size[0], square.position[1]+square.size[1]), square.color, parseInt(square.size[0]/6));
 
             if(square.pointInsideSquare([center_x, center_y])){
                 points+= square.calcPoints()
@@ -367,6 +367,7 @@ function onOpenCvReady(){
         cv.resize(src, smallerSrc, new cv.Size(320, 240))
         cv.imshow('camera', src)
         cv.imshow('canvasOutput', background);
+        smallerSrc.delete();
         background.delete();
         low.delete();
         high.delete();

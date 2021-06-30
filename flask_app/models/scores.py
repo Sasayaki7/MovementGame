@@ -31,8 +31,10 @@ class Score:
         return connectToMySQL(cls.__db).query_db(query, data)
 
 
+
     @staticmethod
     def clean_scores_data(data):
         keys = ['score', 'id', 'mode', 'song_id', 'user_id', 'created_at', 'updated_at', 'name']
         cleaned_data = {key: data[f'scores.{key}'] if f'scores.{key}' in data else data[key] for key in keys}
         return cleaned_data
+
