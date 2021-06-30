@@ -1,5 +1,5 @@
 
-
+let myMusic= document.getElementById("music");
 let s = undefined;
 
 class SequenceCreator{
@@ -11,18 +11,20 @@ class SequenceCreator{
     addSequence(element){
         let key = Math.floor(Date.now()-this.startTime)
         this.sequence[key] = element
+        console.log(key)
     }
 
     saveFile(){
         let data = JSON.stringify(this.sequence)
 
-        var myFile = new File([data], "1.json", {type: "text/plain;charset=utf-8"});
+        var myFile = new File([data], "opm-op.json", {type: "text/plain;charset=utf-8"});
         saveAs(myFile);
     }
 }
 
 
 function onStart(){
+    myMusic.play();
     s = new SequenceCreator();
 }
 

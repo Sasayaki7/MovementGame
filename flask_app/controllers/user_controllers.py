@@ -1,8 +1,11 @@
-from flask import render_template, request, session, redirect, flash
+from flask import render_template, request, session, redirect, flash, jsonify
 from flask_bcrypt import Bcrypt
 from flask_app import app
 from ..models.users import User
 from ..models.settings import Settings
+import json
+import pathlib
+
 bcrypt = Bcrypt(app)
 
 @app.route('/')
@@ -36,6 +39,19 @@ def add_user():
 
 
 
+@app.route('/fetch-sequence', methods=['POST'])
+def get_json():
+    path = pathlib.PureWindowsPath(__file__).parent.parent
+    path = path.joinpath('static\\sequence-obj\\')
+    print(request.form)
+    file = open(f'{path}{request.form["filename"]}')
+    data = json.load(file)
+    file.close()
+    print(data)
+    return data
+
+
+
 @app.route('/login', methods=['POST'])
 def login():
     user = User.check_username(request.form['username'])
@@ -56,10 +72,11 @@ def login():
 
 @app.route('/play')
 def landing_page():
+    return render_template('webcamtest.html')
     if 'uuid' in session:
         user_info = User.get_user(session['uuid'])
         users = User.get_all()
-        return render_template('success.html', user_info=user_info, users=users)
+        return render_template('webcamtest.html')
     else:
         return redirect('/')
 
