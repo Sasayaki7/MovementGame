@@ -36,7 +36,7 @@
     <input type="hidden" name="id" id='hiddenformId' value={{user.current_settings.id}}>
 </form>
 
-<form action="/save_new_settings" class='default-form no-show' method="post">
+<form class='floating-form default-form no-show' method="post">
     <label for='name'>Name</label>
     <input name='name' type="text" value="New-Calibration">
     <div class="min">
@@ -59,7 +59,7 @@
     <input type="submit" value="Create">
 </form>
 
-<form action="/update_settings" class='update-form' method="post">
+<form class='floating-form update-form' method="post">
     <input type="hidden" name="id" id="update-id" value={{user.current_settings.id}}>
     <label for='name'>Name</label>
     <input name='name' type="text" value="{{user.current_settings.name}}">

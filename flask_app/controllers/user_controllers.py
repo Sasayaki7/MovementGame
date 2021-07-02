@@ -77,7 +77,7 @@ def login():
 @app.route('/play')
 def landing_page():
     if 'uuid' in session:
-        user_info = User.get_user(session['uuid'])
+        user_info = User.get_user_and_settings(session['uuid'])
         songs = Song.get_all()
         return render_template('webcamtest.html', user = user_info, songs =songs)
     else:

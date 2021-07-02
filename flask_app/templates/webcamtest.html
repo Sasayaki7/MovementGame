@@ -27,10 +27,10 @@
     <div class="inputoutput">
         <div class="overlay">
             <div class="left-menu">
-                <button onclick="play()">Play</button>
-                <a href="/calibration">Calibrate</a>
-                <button onclick="showleaderboard()">Leaderboard</button>
-                <button onclick="exit()">Exit</button>
+                <button onclick="play();">Play</button>
+                <button onclick="calibrateOn(); startCalibration();">Calibrate</button>
+                <button onclick="showleaderboard();">Leaderboard</button>
+                <button onclick="exit();">Exit</button>
             </div>
             <div class="songinfo no-show">
                 <p>Total songs: <span id='total-songs'>{{songs|length}}</span></p>
@@ -77,9 +77,61 @@
             </div>
             <button id="backButton" class="bbtn no-show" onclick="backButton()">← Back</button>
             <button id="returnButton" class="bbtn no-show" onclick="returnToSelector()">← Back</button>
-
+            <button id="calibration-return" class="bbtn no-show" onclick="calibrationReturn(); stopCalibration();">← Back</button>
+            <div class="calibration-hub no-show">
+                <form class='floating-form'>
+                    <input type="hidden" name="id" id="update-id" value={{user.current_settings.id}}>
+                    <div class="calibration-hub-title">
+                        <div class="input-col">
+                            <label for='name'>Name</label>
+                            <input class='name-input' name='name' type="text" value="{{user.current_settings.name}}">
+                        </div>
+                        <select onchange="onSelectChange(this)" id="selected-calibration">
+                            <option value="-1">--new--</option>
+                    
+                        {% for setting in user.settings %}
+                            <option value="{{setting.id}}" {% if setting.active %}selected{% endif %}>{{setting.name}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="sliders min">
+                        <div class="input-col">
+                            <label for="huemin">Hue Min</label>
+                            <input type="range" name="huemin" class="huemin" min='0' max='255' value={{user.current_settings["huemin"]}}>
+                        </div>
+                        <div class="input-col">
+                            <label for="satmin">Sat Min</label>
+                            <input type="range" name="satmin" class="satmin" min='0' max='255' value={{user.current_settings["satmin"]}}>
+                        </div>
+                        <div class="input-col">
+                            <label for="valmin">Val Min</label>
+                            <input type="range" name="valmin" class="valmin" min='0' max='255' value={{user.current_settings["valmin"]}}>
+                        </div>
+                    </div>
+            
+                    <div class="sliders max">
+                        <div class="input-col">
+                            <label for="huemax">Hue Max</label>
+                            <input type="range" name="huemax" class="huemax" min='0' max='255' value={{user.current_settings["huemax"]}}>
+                        </div>
+                        <div class="input-col">
+                            <label for="satmax">Sat Max</label>
+                            <input type="range" name="satmax" class="satmax" min='0' max='255' value={{user.current_settings["satmax"]}}>
+                        </div>
+                        <div class="input-col">
+                            <label for="valmax">Val Max</label>
+                            <input type="range" name="valmax" class="valmax" min='0' max='255' value={{user.current_settings["valmax"]}}>
+                        </div>
+                    </div>
+                </form>
+                <button onclick="newCalibration();" class="calibration-submission create-calibration no-show">Create</button>
+                <div class="calibration-btn">
+                    <button onclick="updateCalibration();" class="calibration-submission update-calibration">Update Settings</button>
+                    <button onclick="setCalibration();" class="calibration-submission set-calibration">Set</button>
+                </div>
+            </div>
         </div>
-        <canvas id="canvasOutput" >
+        <canvas id="canvasOutput">
             
         </canvas>
     </div>
@@ -87,6 +139,12 @@
     
 
 
+
+
+
+<form id='hiddenform'>
+    <input type="hidden" name="id" id='hiddenformId' value={{user.current_settings.id}}>
+</form>
 
 
 
@@ -98,10 +156,11 @@
     <button class='btn btn-primary' onclick="toggle()">Toggle camera</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-
+    <script src="{{url_for('static', filename='js/objects.js')}}"></script>
     <script src="{{url_for('static', filename='js/webcam_detection.js')}}"></script>
     <script src="{{url_for('static', filename='js/movement_game_visual.js')}}"></script>
     <script src="{{url_for('static', filename='js/leaderboard-handler.js')}}"></script>
+    <script src="{{url_for('static', filename='js/calibrate.js')}}"></script>
     <script async src="{{url_for('static', filename='js/opencv.js')}}" onload="onOpenCvReady();" type="text/javascript"></script>
 </body>
 </html>

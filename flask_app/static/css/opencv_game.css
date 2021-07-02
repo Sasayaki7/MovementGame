@@ -212,3 +212,56 @@ body{
     top: 440px;
     left: 5px;
 }
+
+
+#calibration-return{
+    top: 5px;
+}
+
+.calibration-hub{
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.4);
+    position: absolute;
+    width: 100%;
+    top: 350px;
+}
+
+.calibration-hub-title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px 20px;
+}
+
+.floating-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.sliders{
+    display: flex;
+    gap: 10px;
+    margin-left: 10px;
+}
+
+
+.input-col{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.calibration-submission{
+    background-color: purple;
+    color: white;
+    border: solid white 1px;
+    border-radius: 5px;
+    width: 250px;
+    margin: 5px auto;
+}
+
+.calibration-btn{
+    display: flex;
+    justify-content: space-evenly;
+}

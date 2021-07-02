@@ -40,7 +40,7 @@ def get_leaderboard_for_song():
 def score_submission():
     if not 'uuid' in session:
         return redirect('/')
-    data = {k:v for (k, v) in request.form.items()}
+    data = {k: int(v) if v.isnumeric() else v for (k, v) in request.form.items()}
     data['user_id'] = session['uuid']
     Score.add_score(data)
-    return 1
+    return jsonify(message="success")

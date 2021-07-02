@@ -6,6 +6,10 @@ const leaderboard = document.querySelector('.leaderboard-display');
 const backBtn = document.getElementById('backButton');
 const returnToSongBtn = document.getElementById('returnButton');
 const finalBanner = document.querySelector('.score-output');
+const calibrationHub = document.querySelector('.calibration-hub');
+const gameDisplay = document.querySelector('.inputoutput')
+const calibrationReturnButton = document.getElementById('calibration-return');
+
 
 function invisible(element){
     element.classList.add('no-show');
@@ -36,12 +40,16 @@ function play(){
 
 function selectSong(){
     invisible(songSelector);
+    invisible(backBtn);
     visible(startButton);
+    visible(returnToSongBtn);
 }
 
 
 function onStartVisual(){
     invisible(startButton);
+    invisible(returnToSongBtn);
+
 }
 
 function showleaderboard(){
@@ -52,4 +60,19 @@ function showleaderboard(){
 
 function hideOutput(){
     invisible(finalBanner);
+}
+
+function calibrationReturn(){
+    invisible(calibrationReturnButton);
+    invisible(calibrationHub);
+    visible(leftmenu);
+    gameDisplay.style.borderBottom = "double white;"
+
+}
+
+function calibrateOn(){
+    invisible(leftmenu);
+    visible(calibrationHub);
+    visible(calibrationReturnButton);
+    gameDisplay.style.borderBottom = "transparent;"
 }

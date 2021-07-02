@@ -20,34 +20,46 @@ def user_calibration():
 
 
 
-@app.route('/get_calibration', methods=['POST'])
+@app.route('/create_calibration', methods=['POST'])
+def create_calibration():
+    data = {key: int(val) if val.isnumeric() and key != 'name' else val for (key, val) in request.form.items()}
+    data['user_id'] = session['uuid']
+    calibration_id = Settings.add_setting(data)
+    return jsonify(id=calibration_id)
+
+
+
+@app.route('/get_calibration')
 def get_calibration():
-    calibration = Settings.get_setting_json(request.form['id'])
+    calibration = Settings.get_setting_json(request.args['id'])
     return jsonify(calibration)
+
+
 
 
 @app.route('/save_new_settings', methods=['POST'])
 def save_calibration():
-    if not 'uuid' in session:
-        return redirect('/')
+
     if Settings.validate_settings(request.form):
         data = {key: int(val) if val.isnumeric() and key != 'name' else val for (key, val) in request.form.items()}
         curr_id = Settings.add_setting(data)
-
         Settings.update_current_settings(session['uuid'], curr_id)
-        return redirect('/play')
     else:
         return redirect('/calibration')
-    
 
-@app.route('/update_settings', methods=['POST'])
+
+
+@app.route('/set_calibration', methods=['POST'])
+def update_current_calibration():
+    Settings.update_current_settings(request.form['id'])
+    return jsonify(id=request.form['id'])
+
+
+
+@app.route('/update_calibration', methods=['POST'])
 def update_calibration():
-    if not 'uuid' in session:
-        return redirect('/')
-    if Settings.validate_settings(request.form):
-        data = {key: int(val) if val.isnumeric() and key != 'name' else val for (key, val) in request.form.items()}
-        Settings.update_setting(data)
-        Settings.update_current_settings(session['uuid'], data['id'])
-        return redirect('/play')
-    else:
-        return redirect('/calibration')
+    print('hi')
+    data = {key: int(val) if val.isnumeric() and key != 'name' else val for (key, val) in request.form.items()}
+    Settings.update_setting(data)
+    Settings.update_current_settings(session['uuid'], data['id'])
+    return jsonify(id=data['id'])
