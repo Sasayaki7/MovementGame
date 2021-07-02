@@ -1,3 +1,9 @@
+#Sasayaki7
+#Rick Momoi
+#7/1/2021
+#Flask Controller for Users
+
+
 from ..config.mysqlconnection import connectToMySQL
 from flask import flash
 import re
@@ -16,7 +22,7 @@ class User:
         self.password = data['password']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
-        self.current_settings = settings.Settings.get_setting(data['current_setting'])
+        self.current_settings = settings.Settings.get_setting(data['settings.id']) if 'settings.id' in data  else None
         self.settings = []
         self.scores = []
 
@@ -32,7 +38,9 @@ class User:
 
     @classmethod
     def get_user(cls, id):
-        query = 'SELECT * FROM users WHERE id=%(id)s;'
+        query = 'SELECT * FROM users '\
+            'JOIN settings ON users.id = settings.user_id '\
+            'WHERE users.id=%(id)s AND settings.active = 1;'
         result = connectToMySQL(cls.__db).query_db(query, {'id':id})
         return len(result) == 0 and None or User(result[0])
 
@@ -46,16 +54,18 @@ class User:
     @classmethod
     def add_user(cls, data):
         data['stored_username'] = data['username'].lower()
-        query = 'INSERT INTO users (username, stored_username, current_settings, email, password, created_at, updated_at) '\
-            'VALUES (%(username)s, %(stored_username)s, 1, %(email)s, %(hashed_password)s, NOW(), NOW());'
+        query = 'INSERT INTO users (username, stored_username, email, password, created_at, updated_at) '\
+            'VALUES (%(username)s, %(stored_username)s, %(email)s, %(hashed_password)s, NOW(), NOW());'
         return connectToMySQL(cls.__db).query_db(query, data)
 
 
     @classmethod
     def get_user_and_highscores(cls, id):
-        query = 'SELECT * FROM users '\
+        query = 'SELECT users.id, username, stored_username, created_at, updated_at, scores.created_at, MAX(scores.score) as scores.score, '\
+            'scores.song_id, scores.user_id, scores.updated_at FROM users '\
             'LEFT JOIN settings ON users.id = scores.user_id '\
-            'WHERE users.id=%(id)s;'
+            'GROUP BY scores.song_id '\
+            'WHERE users.id=%(id)s AND settings.active=1;'
         results = connectToMySQL(cls.__db).query_db(query, {'id': id})
         if len(results) > 0:
             user = User(results[0])
@@ -95,14 +105,6 @@ class User:
         result = connectToMySQL(cls.__db).query_db(query, {'username':username})
         return len(result) != 0 and User(result[0]) or None    
 
-
-
-    @classmethod
-    def update_settings(cls, id, settings_id):
-        query = 'UPDATE users '\
-            'SET current_settings = %(settings_id)s, updated_at = NOW() '\
-            'WHERE id=%(id)s;'
-        result = connectToMySQL(cls.__db).query_db(query, {'id':id, 'settings_id': settings_id})
 
 
     @staticmethod

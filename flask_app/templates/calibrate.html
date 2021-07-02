@@ -4,12 +4,17 @@
     <meta charset="utf-8">
     <title>Movement Calibration</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="{{url_for('static', filename='css/calibration.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/header-format.css')}}">
+
 </head>
 <body>
-<h2>Hello OpenCV.js</h2>
-<p id="status">OpenCV.js is loading...</p>
 
 
+<div class="header">
+    <a class="btn btn-primary" href="">Back</a>
+    <a href='/logout' class='btn btn-danger'>Logout</a>
+</div>
 
 <div>
     <button class="btn btn-primary invisible" onclick="onStart()">Calibrate</button>
@@ -17,29 +22,65 @@
 </div>
 <div class="inputoutput">
     <canvas id="canvasOutput" ></canvas>
-    <div class="caption">canvasOutput</div>
 </div>
-<form action="/save_new_settings" method="post">
+
+<select onchange="onSelectChange(this)" id="selected-calibration">
+        <option value="-1">--new--</option>
+
+    {% for setting in user.settings %}
+        <option value="{{setting.id}}" {% if setting.active %}selected{% endif %}>{{setting.name}}</option>
+    {% endfor %}
+</select>
+
+<form id='hiddenform'>
+    <input type="hidden" name="id" id='hiddenformId' value={{user.current_settings.id}}>
+</form>
+
+<form action="/save_new_settings" class='default-form no-show' method="post">
     <label for='name'>Name</label>
-    <input name='name' type="text">
+    <input name='name' type="text" value="New-Calibration">
     <div class="min">
         <label for="huemin">Hue Min</label>
-        <input type="range" name="huemin" id="huemin" min='0' max='255' value={{user.current_settings["huemin"]}}>
+        <input type="range" name="huemin" class="huemin" min='0' max='255' value=0>
         <label for="satmin">Sat Min</label>
-        <input type="range" name="satmin" id="satmin" min='0' max='255' value={{user.current_settings["satmin"]}}>
+        <input type="range" name="satmin" class="satmin" min='0' max='255' value=0>
         <label for="valmin">Val Min</label>
-        <input type="range" name="valmin" id="valmin" min='0' max='255' value={{user.current_settings["valmin"]}}>
+        <input type="range" name="valmin" class="valmin" min='0' max='255' value=0>
     </div>
 
     <div class="max">
         <label for="huemax">Hue Max</label>
-        <input type="range" name="huemax" id="huemax" min='0' max='255' value = 255 value={{user.current_settings["huemax"]}}>
+        <input type="range" name="huemax" class="huemax" min='0' max='255' value = 255>
         <label for="satmax">Sat Max</label>
-        <input type="range" name="satmax" id="satmax" min='0' max='255' value = 255 value={{user.current_settings["satmax"]}}>
+        <input type="range" name="satmax" class="satmax" min='0' max='255' value = 255>
         <label for="valmax">Val Max</label>
-        <input type="range" name="valmax" id="valmax" min='0' max='255' value = 255 value={{user.current_settings["valmax"]}}>
+        <input type="range" name="valmax" class="valmax" min='0' max='255' value = 255>
     </div>
     <input type="submit" value="Create">
+</form>
+
+<form action="/update_settings" class='update-form' method="post">
+    <input type="hidden" name="id" id="update-id" value={{user.current_settings.id}}>
+    <label for='name'>Name</label>
+    <input name='name' type="text" value="{{user.current_settings.name}}">
+    <div class="min">
+        <label for="huemin">Hue Min</label>
+        <input type="range" name="huemin" class="huemin" min='0' max='255' value={{user.current_settings["huemin"]}}>
+        <label for="satmin">Sat Min</label>
+        <input type="range" name="satmin" class="satmin" min='0' max='255' value={{user.current_settings["satmin"]}}>
+        <label for="valmin">Val Min</label>
+        <input type="range" name="valmin" class="valmin" min='0' max='255' value={{user.current_settings["valmin"]}}>
+    </div>
+
+    <div class="max">
+        <label for="huemax">Hue Max</label>
+        <input type="range" name="huemax" class="huemax" min='0' max='255' value={{user.current_settings["huemax"]}}>
+        <label for="satmax">Sat Max</label>
+        <input type="range" name="satmax" class="satmax" min='0' max='255' value={{user.current_settings["satmax"]}}>
+        <label for="valmax">Val Max</label>
+        <input type="range" name="valmax" class="valmax" min='0' max='255' value={{user.current_settings["valmax"]}}>
+    </div>
+    <input type="submit" value="Save">
 </form>
 
 <script src="{{url_for('static', filename='js/calibrate.js')}}"></script>

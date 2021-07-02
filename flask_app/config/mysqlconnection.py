@@ -1,3 +1,7 @@
+#Yeah, I'll understand this one day.
+#Credit due where it's due. This python script was written by CodingDojo, not me.
+
+
 # a cursor is the object we use to interact with the database
 import pymysql.cursors
 # this class will give us an instance of a connection to our database

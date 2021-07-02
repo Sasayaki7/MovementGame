@@ -1,3 +1,9 @@
+#Sasayaki7
+#Rick Momoi
+#7/1/2021
+#Flask Controller for Songs
+
+
 from ..config.mysqlconnection import connectToMySQL
 from flask import flash
 from ..models import scores
@@ -13,6 +19,7 @@ class Song:
         self.duration = data['duration']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        self.score = data['score'] if 'score' in data else 0
         self.high_scores = []
 
 
@@ -28,6 +35,14 @@ class Song:
         query = 'SELECT * FROM songs WHERE id=%(id)s;'
         result = connectToMySQL(cls.__db).query_db(query, {'id':id})
         return len(result) == 0 and None or Song(result[0])
+
+
+    @classmethod
+    def get_song_json(cls, id):
+        query = 'SELECT * FROM songs WHERE id=%(id)s;'
+        result = connectToMySQL(cls.__db).query_db(query, {'id':id})
+        return result[0]
+
 
 
 
@@ -49,14 +64,32 @@ class Song:
 
     @classmethod
     def get_high_score_for_song_json(cls, songid):
-        query = 'SELECT * FROM scores '\
-            'LEFT JOIN songs ON scores.song_id = songs.id '\
+        query = 'SELECT * FROM songs '\
+            'LEFT JOIN scores ON scores.song_id = songs.id '\
+            'LEFT JOIN users ON users.id = scores.user_id '\
             'WHERE songs.id = %(songid)s '\
             'ORDER BY scores.score DESC '\
             'LIMIT 10;'
         result = connectToMySQL(cls.__db).query_db(query, {'songid': songid})
         return result
 
+
+
+    @classmethod
+    def get_song_and_high_scores(cls, id):
+        query = 'SELECT * FROM songs '\
+            'LEFT JOIN scores ON scores.song_id = songs.id '\
+            'WHERE songs.id=%(id)s '\
+            'ORDER BY scores.score DESC;'
+
+        result = connectToMySQL(cls.__db).query_db(query, {'id':id})
+        if len(result) == 0:
+            return None
+        else:
+            song = Song(result[0])
+            for row in result:
+                song.high_scores.append(scores.Score(scores.Score.clean_scores_data(row)))
+            return song
 
 
     @classmethod

@@ -1,3 +1,9 @@
+#Sasayaki7
+#Rick Momoi
+#7/1/2021
+#Flask Controller for Score
+
+
 from flask import request, session, redirect, render_template, jsonify
 from ..models.scores import Score
 from ..models.songs import Song
@@ -22,9 +28,19 @@ def get_leaderboard_for_user():
     return jsonify(data)
 
 
-@app.route('/get_leaderboard_for_song', methods=['POST'])
+@app.route('/get_leaderboard_for_song')
 def get_leaderboard_for_song():
     if not 'uuid' in session:
         return redirect('/')
-    data = Song.get_high_score_for_song_json(request.form['songid'])
+    data = Song.get_high_score_for_song_json(request.args['id'])
     return jsonify(data)
+
+
+@app.route('/submit_score', methods=['POST'])
+def score_submission():
+    if not 'uuid' in session:
+        return redirect('/')
+    data = {k:v for (k, v) in request.form.items()}
+    data['user_id'] = session['uuid']
+    Score.add_score(data)
+    return 1

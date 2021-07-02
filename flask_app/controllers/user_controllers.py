@@ -1,6 +1,13 @@
+#Sasayaki7
+#Rick Momoi
+#7/1/2021
+#Flask Controller for User. Carryover code mostly.
+
+
 from flask import render_template, request, session, redirect, flash, jsonify
 from flask_bcrypt import Bcrypt
 from flask_app import app
+from ..models.songs import Song
 from ..models.users import User
 from ..models.settings import Settings
 import json
@@ -11,7 +18,7 @@ bcrypt = Bcrypt(app)
 @app.route('/')
 def start_page():
     if 'uuid' in session:
-        return redirect('/success')
+        return redirect('/play')
     else:
         return render_template('login.html')
 
@@ -29,8 +36,7 @@ def add_user():
     if User.validate(data):
         id = User.add_user(data)
         current_settings = Settings.add_setting({'huemin':  0, 'satmin': 93, 'valmin': 44, 'huemax': 73, 'satmax': 255, 'valmax': 200, 'user_id': id, 'name': 'Default'})
-        User.update_settings(id, current_settings)
-        user_info = User.get_user(id)
+        Settings.update_current_settings(id, current_settings)
         session.clear()
         session['uuid'] = id 
         return redirect('/play')
@@ -43,11 +49,9 @@ def add_user():
 def get_json():
     path = pathlib.PureWindowsPath(__file__).parent.parent
     path = path.joinpath('static\\sequence-obj\\')
-    print(request.form)
     file = open(f'{path}{request.form["filename"]}')
     data = json.load(file)
     file.close()
-    print(data)
     return data
 
 
@@ -65,18 +69,17 @@ def login():
 
     if valid:
         session['uuid'] = user.id
-        return redirect('/success')
+        return redirect('/play')
     else:
         return redirect('/')
 
 
 @app.route('/play')
 def landing_page():
-    return render_template('webcamtest.html')
     if 'uuid' in session:
         user_info = User.get_user(session['uuid'])
-        users = User.get_all()
-        return render_template('webcamtest.html')
+        songs = Song.get_all()
+        return render_template('webcamtest.html', user = user_info, songs =songs)
     else:
         return redirect('/')
 

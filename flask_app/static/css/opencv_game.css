@@ -1,3 +1,214 @@
+body{
+    background-color: black;
+}
+
+
 .no-show{
     visibility: hidden;
+}
+
+.songinfo{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 640px;
+    gap: 10px;
+    position: absolute;
+    top: 280px;
+
+}
+
+.inputoutput{
+    position: relative;
+    border: double white;
+    width: 646px;
+    height: 486px;
+    margin: auto;
+}
+
+.left-menu{
+    position: absolute;
+    top: 15px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    width: 200px;
+    gap: 5px;
+}
+
+.left-menu > *{
+    font-size: 20pt;
+    background-color: turquoise;
+    color: white;
+    text-align: left;
+    border: none;
+    padding-left: 10px;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-variant: small-caps;
+    border-radius: 0px 5px 5px 0px;
+}
+
+
+.songinfo p{
+    margin: 0px 10px;
+    color: white;
+    font-size: 18pt;
+}
+
+.overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.start-button{
+    margin: auto;
+    position: absolute;
+    top: 370px;
+    left: 170px;
+    color: white;
+    font-size: 28pt;
+    border-radius: 7px;
+    background-color: blue;
+    width: 300px;
+    height: 60px;
+}
+
+.song-pick-button{
+    color: white;
+    border: solid white;
+    background-color: violet;
+    border-radius: 7px;
+}
+
+
+.song-picker-center{
+    display: flex;
+    flex-direction: column;
+    border: solid white;
+
+    justify-content: space-around;
+    background-color: violet;
+    border-radius: 7px;
+}
+
+
+.selector-button{
+    color: white;
+    background-color: blue;
+    border: white solid;
+    border-radius: 7px;
+    font-size: 20pt;
+    height: 50px;
+    width: 240px;
+    margin: auto;
+}
+
+.songselector{
+    display: flex;
+    width: 94%;
+    margin-left: 3%;
+    gap: 10px;
+    justify-content: center;
+}
+
+
+.score-output{
+
+    top: 150px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    color:white;
+}
+
+.score-output p{
+    font-size: 20pt;
+}
+
+.banner{
+    background-image: "";
+}
+#final-score-display{
+    font-size: 50pt;
+    color:lime;
+    
+}
+
+
+
+.leaderboard-display{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    position: absolute;
+    top: 50px;
+}
+
+.leaderboard-header{
+    display: flex;
+    width: 640px;
+    gap: 10px;
+    margin: auto;
+    justify-content: space-around;
+}
+
+.leaderboard-song-display{
+    color: white;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 18pt;
+    padding: 5px;
+}
+
+.leaderboard-song-select{
+    padding: 0px 10px;
+    font-size: 20pt;
+}
+
+#your-best-score-label{
+    background-color: slategray;
+    color: white;
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 250px;
+    margin-left: 195px;
+}
+
+
+.leaderboard{
+    color: white;
+    width: 94%;
+    margin-left: 3%;
+    border: ridge white;
+}
+
+.leaderboard tr{
+    text-align: left;
+    padding-left: 10px;
+}
+.leaderboard thead tr{
+    background-color: magenta;
+}
+
+
+.leaderboard tbody tr:nth-child(even){
+    background-color: violet;
+}
+
+.leaderboard tbody tr:nth-child(odd){
+    background-color: plum;
+}
+
+.bbtn{
+    color: white;
+    border-radius: 7px;
+    background-color: lightskyblue;
+    position: absolute;
+    border: solid white 2px;
+    top: 440px;
+    left: 5px;
 }

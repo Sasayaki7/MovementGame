@@ -25,12 +25,13 @@ function onStart(){
     streaming = !streaming;
 }
 
-let hueMin = document.getElementById("huemin")
-let satMin = document.getElementById("satmin")
-let valMin = document.getElementById("valmin")
-let hueMax = document.getElementById("huemax")
-let satMax = document.getElementById("satmax")
-let valMax = document.getElementById("valmax")
+let selectedForm = ".update-form "
+let hueMin =undefined; 
+let satMin =undefined;
+let valMin =undefined;
+let hueMax =undefined;
+let satMax =undefined;
+let valMax =undefined;
 
 
 function onOpenCvReady(){
@@ -84,3 +85,51 @@ function onOpenCvReady(){
     setTimeout(processVideo, 0);
 
 }
+
+function onSelectChange(element){
+    if (element.value == -1){
+        selectedForm = '.default-form ';
+        let viewableForm = document.querySelector(selectedForm);
+        viewableForm.classList.remove('no-show');
+        let hideform = document.querySelector('.update-form');
+        hideform.classList.add('no-show');
+        updateObject();
+    }
+    else{
+        selectedForm = '.update-form ';
+        let viewableForm = document.querySelector(selectedForm);
+        viewableForm.classList.remove('no-show');
+        let hideform = document.querySelector('.default-form');
+        hideform.classList.add('no-show');
+        updateObject();
+        document.getElementById('hiddenformId').value = element.value
+        let hiddenForm = new FormData(document.getElementById('hiddenform'));
+        fetch("http://localhost:5000/get_calibration", {
+            method: 'POST', // or 'PUT'
+            body: hiddenForm,
+            })
+            .then(response => response.json())
+            .then(data => {
+            document.querySelector(`${selectedForm} > input`).value = data.name
+            document.getElementById('update-id').value = data.id
+
+            hueMin.value =data.huemin;
+            hueMax.value =data.huemax;
+            satMin.value =data.satmin;
+            satMax.value =data.satmax;
+            valMin.value =data.valmin;
+            valMax.value =data.valmax;
+        })
+    }
+}
+
+function updateObject(){
+    hueMin = document.querySelector(`${selectedForm} .huemin`)
+    satMin = document.querySelector(`${selectedForm} .satmin`)
+    valMin = document.querySelector(`${selectedForm} .valmin`)
+    hueMax = document.querySelector(`${selectedForm} .huemax`)
+    satMax = document.querySelector(`${selectedForm} .satmax`)
+    valMax = document.querySelector(`${selectedForm} .valmax`)
+}
+
+updateObject();

@@ -1,3 +1,10 @@
+#Sasayaki7
+#Rick Momoi
+#7/1/2021
+#Original program in Python. Wanted to go full-stack so rewrote in JS.
+
+
+
 import cv2
 import numpy as np
 import random

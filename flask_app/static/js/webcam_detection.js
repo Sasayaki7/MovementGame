@@ -1,8 +1,16 @@
+//Sasayaki7
+//Rick Momoi
+//7/1/2021
+//Movement Game: May rename later.
+
+//Main script, OpenCV and movement detection script
+
+
 
 class Square{
     static allSquares = [];
     static mSize = [80, 80];
-    static tickerLimit = 7;
+    static tickerLimit = 2;
 
     constructor(position, size, color, growthFactor){
         this.position = [position[0]+parseInt(Square.mSize[0]/2), position[1]+parseInt(Square.mSize[1]/2)];
@@ -168,8 +176,6 @@ class Sequencer{
     }
 
     getNext(){
-        console.log(this.sequence[0])
-        console.log(Date.now()-this.starttime)
         if ((Date.now()-this.starttime) >= this.sequence[0]){
             let key = this.sequence.shift();
             return this.keyval[key]
@@ -204,23 +210,33 @@ class Sequencer{
 
 
 
+const backgCanvas = document.getElementById('background');
+const totalSongs = parseInt(document.getElementById('total-songs').innerHTML);
+const songlabel= document.getElementById('song-name');
+const scoreDisplay = document.getElementById('score-display');
+const myMusic = document.getElementById("music");
+const songScoreDisplay = document.getElementById('song-score');
+const musicSource = document.querySelector('#music source');
+const musicRootURL = musicSource.getAttribute('src');
+const searchForm = document.getElementById('fileform');
 
+
+
+
+let duration = 0;
 let streamObj = undefined;
 let streaming = false;
 let video = document.getElementById('videoInput');
 
 let points = 0;
-let myMusic = document.getElementById("music");
 
-
+let musicIndex = 1;
 let sequence = undefined;
 
 let lowerElem = [0, 93, 44, 0];
 let higherElem = [73, 255, 200, 255];
 let s = new Sequencer();
 
-
-let backgCanvas = document.getElementById('background')
 
 
 function onStart(){
@@ -247,28 +263,89 @@ function onStart(){
 
     else{
 
-        //Stop the webcam
-        streamObj.getTracks().forEach(function(track) {
-            track.stop();
-        });
-
-        //Stop the audio
-        myMusic.stop();
-
-        //Delete the pattern
-        s.clearSequence();
+        stopCam();
         
     }
     streaming = !streaming;
 }
 
 
+function stopCam(){
+    //Stop the webcam
+    streamObj.getTracks().forEach(function(track) {
+        track.stop();
+    });
+
+    //Stop the audio
+    myMusic.pause();
+
+    //Delete the pattern
+    s.clearSequence();
+}
+
+
+
+function fetchSequence(){
+    let form = new FormData(searchForm);
+    fetch("http://localhost:5000/fetch-sequence", {
+    method: 'POST', // or 'PUT'
+    body: form,
+    })
+    .then(response => response.json())
+    .then(data => {
+    sequence=data;
+})
+}
+
+function getSong(){
+    fetch(`http://localhost:5000/fetch-song?id=${musicIndex}`)
+    .then(response => response.json())
+    .then(data => {
+    songScoreDisplay.innerHTML=data['score'] ? data['score']: 0;
+    document.querySelector('#fileform input').setAttribute('value', `\\${data['sequence_file']}`);
+    fetchSequence();
+    songlabel.innerHTML = data['name'];
+    musicSource.setAttribute('src', `${musicRootURL}${data['url']}`);
+    myMusic.load();
+    duration = parseInt(data['duration'])*1000;
+})
+}
+
+
+function prevSong(){
+    musicIndex--;
+    if (musicIndex < 1){
+        musicIndex=totalSongs;
+    }
+    getSong();
+}
+
+function nextSong(){
+    musicIndex++;
+    if (musicIndex > totalSongs){
+        musicIndex=1;
+    }
+    getSong();
+}
+
+
+
+function submitScore(){
+    let subForm = document.getElementById('submission-form')
+    subForm.innerHTML = `<input type="hidden" name="score" value=${score}>
+        <input type="hidden" name="song_id" value=${musicIndex}>` 
+    let form = new FormData(subForm);
+    fetch(`http://localhost:5000/submit_score`, {
+        method: 'POST', // or 'PUT'
+        body: form,
+    }) 
+    .then(response => {})
+    document.getElementById('final-score-display').innerHTML = points;
+    visible(finalBanner);
+    
+}
 
 function onOpenCvReady(){
-
-    let startButton = document.querySelector('.invisible');    
-    startButton.classList.remove('invisible');
-
 
 
     let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
@@ -293,7 +370,7 @@ function onOpenCvReady(){
         //Setting up the background
         let background = cv.imread('background')
         cv.resize(background, background, new cv.Size(video.width, video.height))
-        
+
         //Creating the Mask (Black/white image)
         cv.cvtColor(src, dst, cv.COLOR_BGR2HSV)
         let mask = new cv.Mat();
@@ -334,7 +411,7 @@ function onOpenCvReady(){
             if (square){
                 let x = parseInt(square.position[0]);
                 let y = parseInt(square.position[1]);
-                new Square([x, y], [0, 0], [255, 255, 255, 0], 4)
+                new Square([x, y], [0, 0], [255, 255, 255, 255], 10)
             }
         }
 
@@ -355,6 +432,7 @@ function onOpenCvReady(){
                 points+= square.calcPoints()
                 new Text(square.calcPoints(), square.position)
                 Square.removeSquare(square)
+                scoreDisplay.innerHTML= points
             }
         }
 
@@ -364,8 +442,16 @@ function onOpenCvReady(){
             cv.putText(background, `+${text.text}`, new cv.Point(text.position[0], text.position[1]), cv.FONT_HERSHEY_SIMPLEX, 1, [255, 255, 0, 255]);
             text.checkRemoval()
         }
+
+        if (s.isRunning() && (Date.now() - s.starttime) > duration*1000){
+            stopCam();
+            submitScore();
+        }
+
+        cv.bitwise_and(src, src, dst, mask)
+
         cv.resize(src, smallerSrc, new cv.Size(320, 240))
-        cv.imshow('camera', src)
+        cv.imshow('camera', smallerSrc)
         cv.imshow('canvasOutput', background);
         smallerSrc.delete();
         background.delete();
@@ -389,17 +475,14 @@ function toggle(){
 }
 
 function onBodyLoad(){
-    let searchForm = document.getElementById('fileform')
-    let form = new FormData(searchForm);
+
     let backImg = document.getElementById('image')
     var ctx = backgCanvas.getContext("2d");
     ctx.drawImage(backImg, 0, 0);
-    fetch("http://localhost:5000/fetch-sequence", {
-    method: 'POST', // or 'PUT'
-    body: form,
-    })
-    .then(response => response.json())
-    .then(data => {
-    sequence=data;
-})
+    getSong();
+    fetchSequence();
+    
+    let calibrationD = document.getElementById('calibration-data')
+    lowerElem = [parseInt(calibrationD.getAttribute('huemin')), parseInt(calibrationD.getAttribute('satmin')), parseInt(calibrationD.getAttribute('valmin')), 0];
+    higherElem = [parseInt(calibrationD.getAttribute('huemax')), parseInt(calibrationD.getAttribute('satmax')), parseInt(calibrationD.getAttribute('valmax')), 255];
 }
