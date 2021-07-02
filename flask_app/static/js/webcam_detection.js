@@ -15,6 +15,9 @@ const songScoreDisplay = document.getElementById('song-score');
 const musicSource = document.querySelector('#music source');
 const musicRootURL = musicSource.getAttribute('src');
 const searchForm = document.getElementById('fileform');
+const streakLabel = document.getElementById('streak-display');
+const songConfirmLabel = document.getElementById('song-final-id');
+const songDurationLabel = document.getElementById('song-duration-check');
 
 
 
@@ -25,6 +28,7 @@ let streaming = false;
 let video = document.getElementById('videoInput');
 
 let points = 0;
+let streak = 0;
 
 let musicIndex = 1;
 let sequence = undefined;
@@ -56,7 +60,8 @@ function onStart(){
     //Load up the shape pattern for this song
     s.loadSequence(sequence);
     s.start();
-
+    points = 0;
+    streak = 0;
     startCam();
     
 }
@@ -112,6 +117,12 @@ function getSong(){
     songlabel.innerHTML = data['name'];
     musicSource.setAttribute('src', `${musicRootURL}${data['url']}`);
     myMusic.load();
+    songConfirmLabel.innerHTML = data['name'];
+    let second = parseInt(data['duration']%60).toString();
+    if (second.length == 1){
+        second = '0'+second;
+    }
+    songDurationLabel.innerHTML = `${Math.floor(data['duration']/60)}:${second}`
     duration = (parseInt(data['duration'])+3)*1000;
 })
 }
@@ -133,6 +144,16 @@ function nextSong(){
     getSong();
 }
 
+function updateStreak(){
+    streakLabel.innerHTML = streak;
+}
+
+
+function scaleFactor(pos, size, factor){
+    let center = size/2
+    let newZero = center-(size/factor)/2
+    return (parseInt(newZero + pos/factor))
+}
 
 
 function submitScore(){
@@ -149,7 +170,9 @@ function submitScore(){
     .then(response => {})
     document.getElementById('final-score-display').innerHTML = points;
     visible(finalBanner);
-    
+    invisible(gameScoreDisplay);
+    musicLDBIndex = musicIndex;
+    getSongLDB();
 }
 
 function onOpenCvReady(){
@@ -223,8 +246,8 @@ function onOpenCvReady(){
             if (s.isRunning()){
                 let square = s.getNext()
                 if (square){
-                    let x = parseInt(square.position[0]);
-                    let y = parseInt(square.position[1]);
+                    let x = scaleFactor(parseInt(square.position[0]), 640, 1.5);
+                    let y = scaleFactor(parseInt(square.position[1]), 480, 1.5);
                     new Square([x, y], [0, 0], [255, 255, 255, 255], 10)
                 }
             }
@@ -239,16 +262,24 @@ function onOpenCvReady(){
 
             //Drawing all the squares and checking if any of the squares intersected with the hand
             for (square of all_square_copy){
-                square.updateSquare();
+                let stuff = square.updateSquare();
+                if (!stuff){
+                    streak = 0;
+                }
                 cv.rectangle(background, new cv.Point(square.position[0], square.position[1]), new cv.Point(square.position[0]+square.size[0], square.position[1]+square.size[1]), square.color, parseInt(square.size[0]/6));
 
-                if(square.pointInsideSquare([center_x, center_y])){
-                    points+= square.calcPoints()
-                    new Text(square.calcPoints(), square.position)
+                if(square.pointInsideSquare([center_x, center_y]) && square.startTime){
+                    let tempPoints = square.calcPoints();
+                    streak++;
+                    let multiplier = Math.min(Math.floor(streak / 7)/5, 2)
+                    points+= parseInt(tempPoints*(1+multiplier));
+                    new Text(parseInt(tempPoints*(1+multiplier)), square.position)
                     Square.removeSquare(square)
                     scoreDisplay.innerHTML= points
                 }
             }
+            updateStreak();
+
 
             
             //Text that displays the points

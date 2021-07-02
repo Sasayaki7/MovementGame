@@ -3,12 +3,10 @@ const songLeaderboardDisplay = document.getElementById('song-name-leaderboard');
 const highscoreDisplay = document.getElementById('your-high-score');
 
 let musicLDBIndex = 1;
-console.log(document.getElementById('total-songs').innerHTML)
 
 
 
 function getSongLDB(){
-    console.log(musicLDBIndex);
 
     fetch(`http://localhost:5000/get_leaderboard_for_song?id=${musicLDBIndex}`)
     .then(response => response.json())
@@ -19,7 +17,7 @@ function getSongLDB(){
                 <td>${parseInt(key)+1}.</td>
                 <td>${data[key]['score']}</td>
                 <td>${data[key]['username']}</td>
-                <td>${data[key]['created_at']}</td>
+                <td>${data[key]['scores.created_at']}</td>
             </tr>`
         }
         musicLeaderboard.innerHTML = leaderboardData;

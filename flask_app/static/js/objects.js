@@ -1,7 +1,7 @@
 
 class Square{
     static allSquares = [];
-    static mSize = [80, 80];
+    static mSize = [60, 60];
     static tickerLimit = 2;
 
     constructor(position, size, color, growthFactor){
@@ -12,6 +12,9 @@ class Square{
         this.initColor = color;
         this.ticker = 0;
         this.grow_ticker = 0;
+        this.activated = false;
+        this.grown = false;
+        this.startTime = undefined;
         Square.allSquares.push(this);
     }
 
@@ -27,35 +30,42 @@ class Square{
         let arr = [];
         let sum = 0;
         for (let i =0; i < this.color.length; i++){
-            let col = this.color[i]-this.initColor[i]/40;
+            let col = this.color[i]-this.initColor[i]/60;
             arr.push(parseInt(col))
             sum+=col
         }
         this.color = arr;
         if (sum < 0){
             Square.removeSquare(this);
+            return null;
         }
         return this
     }
 
     calcPoints(){
-        return 20-this.size[0]-this.size[1]+Square.mSize[0]+Square.mSize[1];
+        return Math.max(20, parseInt((1000-(Date.now()-this.startTime))/5));
     }
 
 
     updateSquare(){
         if(this.size[0] < Square.mSize[0]){
             this.growSquare()
+            return this
         }
         else{
+            if (!(this.grown)){
+                this.startTime = Date.now();
+                this.grown = true;
+            }
             if(this.ticker < Square.tickerLimit){
                 this.ticker++;
+                return this
             }
             else{
-                this.fadeSquare();
+                return this.fadeSquare();
             }
         }
-        return this
+        
     }
 
 

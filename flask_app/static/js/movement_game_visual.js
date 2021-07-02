@@ -1,5 +1,5 @@
 
-const startButton = document.querySelector('.start-button');  
+const startButton = document.querySelector('.start-display');  
 const leftmenu = document.querySelector('.left-menu');
 const songSelector = document.querySelector('.songinfo');
 const leaderboard = document.querySelector('.leaderboard-display');
@@ -9,7 +9,8 @@ const finalBanner = document.querySelector('.score-output');
 const calibrationHub = document.querySelector('.calibration-hub');
 const gameDisplay = document.querySelector('.inputoutput')
 const calibrationReturnButton = document.getElementById('calibration-return');
-
+const gameScoreDisplay = document.querySelector('.game-display');
+const exitMenu = document.querySelector('.exit-game');
 
 function invisible(element){
     element.classList.add('no-show');
@@ -28,6 +29,7 @@ function backButton(){
 
 function returnToSelector(){
     invisible(startButton);
+    invisible(returnToSongBtn);
     visible(backBtn);
     visible(songSelector);
 }
@@ -49,7 +51,7 @@ function selectSong(){
 function onStartVisual(){
     invisible(startButton);
     invisible(returnToSongBtn);
-
+    visible(gameScoreDisplay);
 }
 
 function showleaderboard(){
@@ -76,3 +78,15 @@ function calibrateOn(){
     visible(calibrationReturnButton);
     gameDisplay.style.borderBottom = "transparent;"
 }
+
+function toExitMenu(){
+    invisible(leftmenu);
+    visible(exitMenu);
+}
+
+
+function noExitGameVisual(){
+    visible(leftmenu);
+    invisible(exitMenu);
+}
+

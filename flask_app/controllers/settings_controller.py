@@ -31,7 +31,9 @@ def create_calibration():
 
 @app.route('/get_calibration')
 def get_calibration():
-    calibration = Settings.get_setting_json(request.args['id'])
+    data = {key: int(val) if val.isnumeric() and key != 'name' else val for (key, val) in request.args.items()}
+
+    calibration = Settings.get_setting_json(data['id'])
     return jsonify(calibration)
 
 
@@ -51,14 +53,15 @@ def save_calibration():
 
 @app.route('/set_calibration', methods=['POST'])
 def update_current_calibration():
-    Settings.update_current_settings(request.form['id'])
+    data = {key: int(val) if val.isnumeric() and key != 'name' else val for (key, val) in request.form.items()}
+
+    Settings.update_current_settings(data['id'])
     return jsonify(id=request.form['id'])
 
 
 
 @app.route('/update_calibration', methods=['POST'])
 def update_calibration():
-    print('hi')
     data = {key: int(val) if val.isnumeric() and key != 'name' else val for (key, val) in request.form.items()}
     Settings.update_setting(data)
     Settings.update_current_settings(session['uuid'], data['id'])

@@ -4,16 +4,16 @@ calibrationForm = document.querySelector('.floating-form');
 
 
 function onSelectChange(element){
-    if (element.value == -1){
+    if (parseInt(element.value) === -1){
         invisible(document.querySelector('.calibration-btn'));
         visible(document.querySelector('.create-calibration'));
-        document.querySelector('.name-input').setAttribute('value', 'New 1')
-        hueMin.setAttribute('value', 0);
-        hueMax.setAttribute('value', 255);
-        satMin.setAttribute('value', 0);
-        satMax.setAttribute('value', 255);
-        valMin.setAttribute('value', 0);
-        valMax.setAttribute('value', 255);
+        document.querySelector('.name-input').value= 'New 1'
+        hueMin.value = 0
+        hueMax.value = 255
+        satMin.value = 0
+        satMax.value = 255
+        valMin.value = 0
+        valMax.value = 255
     }
     else{
         visible(document.querySelector('.calibration-btn'));
@@ -21,15 +21,15 @@ function onSelectChange(element){
         fetch(`http://localhost:5000/get_calibration?id=${element.value}`)
             .then(response => response.json())
             .then(data => {
-            document.querySelector('.name-input').setAttribute('value',data.name)
-            document.getElementById('update-id').setAttribute('value', data.id)
 
-            hueMin.setAttribute('value', data.huemin);
-            hueMax.setAttribute('value', data.huemax);
-            satMin.setAttribute('value', data.satmin);
-            satMax.setAttribute('value', data.satmax);
-            valMin.setAttribute('value', data.valmin);
-            valMax.setAttribute('value', data.valmax);
+            document.querySelector('.name-input').value =data.name
+            document.getElementById('update-id').value =data.id
+            hueMin.value = data.huemin
+            hueMax.value = data.huemax
+            satMin.value = data.satmin
+            satMax.value = data.satmax
+            valMin.value = data.valmin
+            valMax.value = data.valmax
         })
     }
 }
@@ -93,4 +93,5 @@ function stopCalibration(){
             lowerElem = [data['huemin'], data['satmin'], data['valmin'], 0];
             higherElem = [data['huemax'], data['satmax'], data['valmax'], 255];
     })
+    stopCam();
 }

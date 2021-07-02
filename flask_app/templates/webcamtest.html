@@ -13,7 +13,6 @@
         satmax = {{user.current_settings.satmax}} valmin = {{user.current_settings.valmin}} valmax = {{user.current_settings.valmax}} id="calibration-data" style="display: none;">
     </div>
     <div class="header">
-    <a href='/logout' class='btn btn-danger'>Logout</a>
     </div>
     <canvas id="camera" width="320" height="240" class='no-show'></canvas>
     <img id='image' src="../static/images/neon-lights-stage.jpg" style="display: none;">
@@ -30,7 +29,7 @@
                 <button onclick="play();">Play</button>
                 <button onclick="calibrateOn(); startCalibration();">Calibrate</button>
                 <button onclick="showleaderboard();">Leaderboard</button>
-                <button onclick="exit();">Exit</button>
+                <button onclick="toExitMenu();">Exit</button>
             </div>
             <div class="songinfo no-show">
                 <p>Total songs: <span id='total-songs'>{{songs|length}}</span></p>
@@ -51,7 +50,20 @@
                 </div>
                 <button onclick="hideOutput(); showleaderboard();" class="selector-button">See Leaderboard</button>
             </div>
-            <button class="start-button no-show" onclick="onStartVisual(); onStart();">Start</button>
+            <div class="exit-game no-show">
+                <p>Are you sure you want to exit?</p>
+                <div class='yn-menu'>
+                    <a id='yes-button' class='exit-button' onclick="noExitGameVisual();" href='/logout'>Yes</a>
+                    <button  class='exit-button' onclick='noExitGameVisual();'>No</button>
+                </div>
+            </div>
+            <div class="start-display no-show">
+                <div class="start-display-text">
+                    <p>Song: <span id='song-final-id'></span></p>
+                    <p>Length: <span id='song-duration-check'></span></p>
+                </div>
+                <button class="start-button" onclick="onStartVisual(); onStart();">Start</button>
+            </div>
             <div class="leaderboard-display no-show">
                 <div class="leaderboard-header">
                     <button class="song-pick-button leaderboard-song-select" onclick="prevSongLDB();"> &lt; </button>  
@@ -130,12 +142,16 @@
                     <button onclick="setCalibration();" class="calibration-submission set-calibration">Set</button>
                 </div>
             </div>
+            <div class="game-display no-show">
+                <p>Streak: <span id='streak-display'>0</span></p>
+                <p>Score: <span id='score-display'>0</span></p>
+            </div>
+
         </div>
         <canvas id="canvasOutput">
             
         </canvas>
     </div>
-    <p>Score: <span id='score-display'>0</span></p>
     
 
 

@@ -85,7 +85,21 @@ class User:
         if len(results) > 0:
             user = User(results[0])
             for row in results:
-                user.settings.append(settings.Settings(settings.Settings.clean_settings_data(row)))
+                data={
+                    'id': row['settings.id'],
+                    'created_at': row['settings.created_at'],
+                    'updated_at': row['settings.updated_at'],
+                    'huemin': row['huemin'],
+                    'huemax': row['huemax'],
+                    'satmin': row['satmin'],
+                    'satmax': row['satmax'],
+                    'valmin': row['valmin'],
+                    'valmax': row['valmax'],
+                    'user_id': row['user_id'],
+                    'active': row['active'],
+                    'name': row['name']
+                }
+                user.settings.append(settings.Settings(data))
             return user
         else:
             return None

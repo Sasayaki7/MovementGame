@@ -64,9 +64,6 @@ body{
 
 .start-button{
     margin: auto;
-    position: absolute;
-    top: 370px;
-    left: 170px;
     color: white;
     font-size: 28pt;
     border-radius: 7px;
@@ -264,4 +261,87 @@ body{
 .calibration-btn{
     display: flex;
     justify-content: space-evenly;
+}
+
+.game-display{
+    color:white;
+    width: 630px;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    position: absolute;
+    top: 450px;
+}
+
+
+.start-display{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 400px;
+    top: 100px;
+    justify-content: space-between;
+}
+
+.start-display-text{
+    color: white;
+    display: flex;
+    text-align: center;
+    gap: 15px;
+    flex-direction: column;
+    font-size: 18pt;
+}
+
+.start-display-text p{
+    background-color: magenta;
+    border-radius: 10px;
+    border: solid white 2px;
+    height: 50px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+
+.exit-game{
+    width: 95%;
+    position: absolute;
+    left: 2.5%;
+    top: 20px;
+    margin:auto;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 450px;
+    background-color: rgba(0,0,0,0.4);
+    border: ridge;
+}
+
+.exit-game p{
+    font-size: 20pt;
+}
+
+.yn-menu{
+    display: flex;
+    justify-content: space-around;
+}
+
+.exit-button{
+    color: white;
+    text-decoration: none;
+    font-size: 18pt;
+    border: solid white 2px;
+    border-radius: 5px;
+    width: 120px;
+    background-color: green;
+}
+
+.exit-button:hover{
+    color: white;
+}
+
+#yes-button{
+    background-color: red;
 }
