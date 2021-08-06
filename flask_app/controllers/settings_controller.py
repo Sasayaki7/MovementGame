@@ -14,7 +14,7 @@ from flask_app import app
 @app.route('/calibration')
 def user_calibration():
     if not 'uuid' in session:
-        return redirect('/')
+        return render_template('calibrate.html', user=None)
     user = User.get_user_and_settings(session['uuid'])
     return render_template('calibrate.html', user=user)
 
@@ -64,5 +64,8 @@ def update_current_calibration():
 def update_calibration():
     data = {key: int(val) if val.isnumeric() and key != 'name' else val for (key, val) in request.form.items()}
     Settings.update_setting(data)
-    Settings.update_current_settings(session['uuid'], data['id'])
-    return jsonify(id=data['id'])
+    if session['uuid']:
+        Settings.update_current_settings(session['uuid'], data['id'])
+        return jsonify(id=data['id'])
+    else:
+        return jsonify(id=0)

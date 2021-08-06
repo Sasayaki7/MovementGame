@@ -18,7 +18,7 @@ const searchForm = document.getElementById('fileform');
 const streakLabel = document.getElementById('streak-display');
 const songConfirmLabel = document.getElementById('song-final-id');
 const songDurationLabel = document.getElementById('song-duration-check');
-
+const userIdDisplay = document.getElementById('update-id');
 
 
 
@@ -157,18 +157,21 @@ function scaleFactor(pos, size, factor){
 
 
 function submitScore(){
-    let subForm = document.getElementById('submission-form')
-    subForm.innerHTML = `<input type="hidden" name="score" value=${points}>
-        <input type="hidden" name="song_id" value=${musicIndex}> 
-        <input type="hidden" name="mode" value=1>` 
+    if (userIdDisplay.value != 0){
+        let subForm = document.getElementById('submission-form')
+        subForm.innerHTML = `<input type="hidden" name="score" value=${points}>
+            <input type="hidden" name="song_id" value=${musicIndex}> 
+            <input type="hidden" name="mode" value=1>` 
 
-    let form = new FormData(subForm);
-    fetch(`http://localhost:5000/submit_score`, {
-        method: 'POST', // or 'PUT'
-        body: form,
-    }) 
-    .then(response => {})
+        let form = new FormData(subForm);
+            fetch(`http://localhost:5000/submit_score`, {
+                method: 'POST', // or 'PUT'
+                body: form,
+            }) 
+            .then(response => {})
+    }
     document.getElementById('final-score-display').innerHTML = points;
+
     visible(finalBanner);
     invisible(gameScoreDisplay);
     musicLDBIndex = musicIndex;

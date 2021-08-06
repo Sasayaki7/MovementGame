@@ -1,40 +1,69 @@
-body{
-    background-color: black;
-}
-.container{
+.login-screen{
+    position: absolute;
     display: flex;
     color: white;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    margin: auto;
 }
 
-
-.left-column{
-    display: flex;
-    flex-direction: column;
+h2{
+    color: hotpink;
+    background-color: pink;
+    text-align: center;
+    border-radius: 5px;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-
-
-.left-column form{
-    display: flex;
-    flex-direction: column;
-}
-
-.right-column{
-    display: flex;
-    flex-direction: column;
-}
-
-
-.right-column form{
-    display: flex;
-    flex-direction: column;
-}
-
 
 .invalid{
     color: red;
 }
 
+
+
 .invisible{
     display: none;
 }
 
+.left-container{
+    background-color: rgba(88,88,88, 0.8);
+    border-radius: 5px;
+    padding: 10px 5px;
+}
+
+.right-container{
+    background-color: rgba(88,88,88, 0.8);
+    border-radius: 5px;
+    padding: 10px 5px;
+}
+
+.input-row{
+    display: flex;
+    align-items: center;
+
+}
+
+.login-screen form{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-row label{
+    width: 80px;
+} 
+
+
+.input-row input{
+    border: inset 2px;
+}
+
+.input-submit{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.input-submit button{
+    width: 120px;
+}

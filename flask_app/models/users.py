@@ -126,27 +126,31 @@ class User:
         valid = True
         if len(data['username']) < 2:
             valid = False
+            print('a')
             flash('username_invalid')
         elif User.check_username(data['username'].lower()):
             valid=False
-            flash('username taken')
+            print('b')
+            flash('username_taken')
         if data['password'] != data['confirm_password']:
             valid = False
+            print('c')
             flash('password_no_match')
         if not (re.search('[A-Z]+', data['password']) and re.search('[0-9]+', data['password'])):
             valid=False
+            print('d')
             flash('weak_password')
         if data['password'] == '':
             valid=False
+            print('e')
             flash('no_password')
         if not re.match(EMAIL_REGEX, data['email']):
             valid = False
+            print('f')
             flash('email_invalid')
-        if User.check_email(data['email']):
-            valid=False
-            flash('email_used')
-        if not 'accept' in data:
-            valid = False
-            flash('no_accept')
+
+        if not valid:
+            flash('gotologin')
+            print('uwu')
         return valid
 

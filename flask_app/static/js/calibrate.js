@@ -51,7 +51,13 @@ function newCalibration(){
 
 function setCalibration(){
     let form = new FormData(calibrationForm);
-    fetch("http://localhost:5000/set_calibration", {
+    if (userIdDisplay.value !==0) {
+        lowerElem = [hueMin.value, satMin.value, valMin.value, 0];
+        higherElem = [hueMax.value, satMax.value, valMax.value, 255];
+
+    }
+    else{
+        fetch("http://localhost:5000/set_calibration", {
             method: 'POST', // or 'PUT'
             body: form,
             })
@@ -59,21 +65,23 @@ function setCalibration(){
             .then(data => {
             calibrationId = data.id
         })
+    }
 }
 
 
 
 function updateCalibration(){
     let form = new FormData(calibrationForm);
-    console.log("I'm beiing called right")
-    fetch("http://localhost:5000/update_calibration", {
-            method: 'POST', // or 'PUT'
-            body: form,
-            })
+    if (userIdDisplay.value !==0) {
+        fetch("http://localhost:5000/update_calibration", {
+                method: 'POST', // or 'PUT'
+                body: form,
+                })
             .then(response => response.json())
             .then(data => {
             calibrationId = data.id
         })
+    }
 }
 
 
@@ -87,11 +95,13 @@ function startCalibration(){
 
 function stopCalibration(){
     isCalibrating = false;
-    fetch(`http://localhost:5000/get_calibration?id=${calibrationId}`)
-        .then(response => response.json())
-        .then(data =>{
-            lowerElem = [data['huemin'], data['satmin'], data['valmin'], 0];
-            higherElem = [data['huemax'], data['satmax'], data['valmax'], 255];
-    })
+    if (userIdDisplay.value !==0) {
+        fetch(`http://localhost:5000/get_calibration?id=${calibrationId}`)
+            .then(response => response.json())
+            .then(data =>{
+                lowerElem = [data['huemin'], data['satmin'], data['valmin'], 0];
+                higherElem = [data['huemax'], data['satmax'], data['valmax'], 255];
+        })
+    }
     stopCam();
 }

@@ -11,6 +11,9 @@ const gameDisplay = document.querySelector('.inputoutput')
 const calibrationReturnButton = document.getElementById('calibration-return');
 const gameScoreDisplay = document.querySelector('.game-display');
 const exitMenu = document.querySelector('.exit-game');
+const loginScreen = document.querySelector('.login-screen');
+const instructionBackButton = document.getElementById("instructionExitButton");
+const instructionMenu = document.querySelector('.instructions');
 
 function invisible(element){
     element.classList.add('no-show');
@@ -90,3 +93,26 @@ function noExitGameVisual(){
     invisible(exitMenu);
 }
 
+function showlogin(){
+    invisible(leftmenu);
+    visible(loginScreen);
+}
+
+function loginReturn(){
+    invisible(loginScreen);
+    visible(leftmenu);
+}
+
+
+function instructions(){
+    visible(instructionBackButton);
+    invisible(leftmenu);
+    visible(instructionMenu);
+}
+
+
+function backInstruction(){
+    visible(leftmenu);
+    invisible(instructionMenu);
+    invisible(instructionBackButton);
+}

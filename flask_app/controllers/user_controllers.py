@@ -41,19 +41,7 @@ def add_user():
         session['uuid'] = id 
         return redirect('/play')
     else:
-        return redirect('/')
-
-
-
-@app.route('/fetch-sequence', methods=['POST'])
-def get_json():
-    path = pathlib.PureWindowsPath(__file__).parent.parent
-    path = path.joinpath('static\\sequence-obj\\')
-    file = open(f'{path}{request.form["filename"]}')
-    data = json.load(file)
-    file.close()
-    return data
-
+        return redirect('/play')
 
 
 @app.route('/login', methods=['POST'])
@@ -71,7 +59,21 @@ def login():
         session['uuid'] = user.id
         return redirect('/play')
     else:
-        return redirect('/')
+        flash("gotologin")
+        return redirect('/play')
+
+
+@app.route('/fetch-sequence', methods=['POST'])
+def get_json():
+    path = pathlib.PureWindowsPath(__file__).parent.parent
+    path = path.joinpath('static\\sequence-obj\\')
+    file = open(f'{path}{request.form["filename"]}')
+    data = json.load(file)
+    file.close()
+    return data
+
+
+
 
 
 @app.route('/play')
@@ -79,14 +81,12 @@ def landing_page():
     if 'uuid' in session:
         user_info = User.get_user_and_settings(session['uuid'])
         songs = Song.get_all()
-        for setting in user_info.settings:
-            print(setting.id)
         return render_template('webcamtest.html', user = user_info, songs =songs)
     else:
-        return redirect('/')
-
+        songs = Song.get_all()
+        return render_template('webcamtest.html', user = None, songs =songs)
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('/')
+    return redirect('/play')
