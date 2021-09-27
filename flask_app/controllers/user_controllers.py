@@ -6,7 +6,6 @@
 
 from flask import render_template, request, session, redirect, flash, jsonify
 from flask_bcrypt import Bcrypt
-from flask_cors import cross_origin
 from flask_app import app
 from ..models.songs import Song
 from ..models.users import User
@@ -63,7 +62,6 @@ def login():
         flash("gotologin")
         return redirect('/play')
 
-@cross_origin()
 @app.route('/fetch-sequence', methods=['POST'])
 def get_json():
     path = pathlib.PureWindowsPath(__file__).parent.parent

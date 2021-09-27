@@ -8,7 +8,7 @@ let musicLDBIndex = 1;
 
 function getSongLDB(){
 
-    fetch(`http://localhost:5000/get_leaderboard_for_song?id=${musicLDBIndex}`)
+    fetch(`/get_leaderboard_for_song?id=${musicLDBIndex}`)
     .then(response => response.json())
     .then(data => {
         let leaderboardData = ""
@@ -22,7 +22,7 @@ function getSongLDB(){
         }
         musicLeaderboard.innerHTML = leaderboardData;
     });
-    fetch(`http://localhost:5000/fetch-song?id=${musicLDBIndex}`)
+    fetch(`/fetch-song?id=${musicLDBIndex}`)
     .then(response => response.json())
     .then(data => {
         songLeaderboardDisplay.innerHTML = data['name'];

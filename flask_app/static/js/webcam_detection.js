@@ -164,7 +164,7 @@ function submitScore(){
             <input type="hidden" name="mode" value=1>` 
 
         let form = new FormData(subForm);
-            fetch(`http://localhost:5000/submit_score`, {
+            fetch(`/submit_score`, {
                 method: 'POST', // or 'PUT'
                 body: form,
             }) 

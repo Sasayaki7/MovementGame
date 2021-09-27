@@ -18,7 +18,7 @@ function onSelectChange(element){
     else{
         visible(document.querySelector('.calibration-btn'));
         invisible(document.querySelector('.create-calibration'));
-        fetch(`http://localhost:5000/get_calibration?id=${element.value}`)
+        fetch(`/get_calibration?id=${element.value}`)
             .then(response => response.json())
             .then(data => {
 
@@ -38,7 +38,7 @@ function onSelectChange(element){
 
 function newCalibration(){
     let form = new FormData(calibrationForm);
-    fetch("http://localhost:5000/create_calibration", {
+    fetch("/create_calibration", {
             method: 'POST', // or 'PUT'
             body: form,
             })
@@ -57,7 +57,7 @@ function setCalibration(){
 
     }
     else{
-        fetch("http://localhost:5000/set_calibration", {
+        fetch("/set_calibration", {
             method: 'POST', // or 'PUT'
             body: form,
             })
@@ -73,7 +73,7 @@ function setCalibration(){
 function updateCalibration(){
     let form = new FormData(calibrationForm);
     if (userIdDisplay.value !==0) {
-        fetch("http://localhost:5000/update_calibration", {
+        fetch("/update_calibration", {
                 method: 'POST', // or 'PUT'
                 body: form,
                 })
@@ -96,7 +96,7 @@ function startCalibration(){
 function stopCalibration(){
     isCalibrating = false;
     if (userIdDisplay.value !==0) {
-        fetch(`http://localhost:5000/get_calibration?id=${calibrationId}`)
+        fetch(`/get_calibration?id=${calibrationId}`)
             .then(response => response.json())
             .then(data =>{
                 lowerElem = [data['huemin'], data['satmin'], data['valmin'], 0];
