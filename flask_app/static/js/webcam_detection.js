@@ -97,7 +97,7 @@ function stopCam(){
 
 function fetchSequence(){
     let form = new FormData(searchForm);
-    fetch("http://localhost:5000/fetch-sequence", {
+    fetch("/fetch-sequence", {
     method: 'POST', // or 'PUT'
     body: form,
     })
@@ -108,7 +108,7 @@ function fetchSequence(){
 }
 
 function getSong(){
-    fetch(`http://localhost:5000/fetch-song?id=${musicIndex}`)
+    fetch(`/fetch-song?id=${musicIndex}`)
     .then(response => response.json())
     .then(data => {
     songScoreDisplay.innerHTML=data['score'] ? data['score']: 0;
