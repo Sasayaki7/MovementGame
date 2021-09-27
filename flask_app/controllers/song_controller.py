@@ -8,9 +8,10 @@ from flask import request, session, redirect, render_template, jsonify
 from ..models.songs import Song
 from ..models.users import User
 from flask_app import app
+from flask_cors import cross_origin
 
 
-
+@cross_origin()
 @app.route('/fetch-song')
 def get_song():
     data =request.args

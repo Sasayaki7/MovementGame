@@ -9,9 +9,10 @@ from ..models.scores import Score
 from ..models.songs import Song
 from ..models.users import User
 from flask_app import app
+from flask_cors import cross_origin
 
 
-
+@cross_origin()
 @app.route('/leaderboard')
 def show_leaderboard():
     if not 'uuid' in session:
@@ -20,6 +21,7 @@ def show_leaderboard():
     return render_template('leaderboard.html', data)
 
 
+@cross_origin()
 @app.route('/get_leaderboard_for_user', methods=['POST'])
 def get_leaderboard_for_user():
     if not 'uuid' in session:
@@ -28,12 +30,13 @@ def get_leaderboard_for_user():
     return jsonify(data)
 
 
+@cross_origin()
 @app.route('/get_leaderboard_for_song')
 def get_leaderboard_for_song():
     data = Song.get_high_score_for_song_json(request.args['id'])
     return jsonify(data)
 
-
+@cross_origin()
 @app.route('/submit_score', methods=['POST'])
 def score_submission():
     if not 'uuid' in session:
