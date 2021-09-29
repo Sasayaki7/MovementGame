@@ -64,8 +64,8 @@ def login():
 
 @app.route('/fetch-sequence', methods=['POST'])
 def get_json():
-    path = pathlib.PureWindowsPath(__file__).parent.parent
-    path = path.joinpath('static\\sequence-obj\\')
+    path = pathlib.PurePath(__file__).parent.parent
+    path = path.joinpath('static/sequence-obj/')
     file = open(f'{path}{request.form["filename"]}')
     data = json.load(file)
     file.close()
