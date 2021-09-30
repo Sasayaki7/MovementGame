@@ -114,7 +114,7 @@ function getSong(){
     .then(response => response.json())
     .then(data => {
     songScoreDisplay.innerHTML=data['score'] ? data['score']: 0;
-    document.querySelector('#fileform input').setAttribute('value', `\\${data['sequence_file']}`);
+    document.querySelector('#fileform input').setAttribute('value', `/${data['sequence_file']}`);
     fetchSequence();
     songlabel.innerHTML = data['name'];
     musicSource.setAttribute('src', `${musicRootURL}${data['url']}`);
