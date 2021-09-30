@@ -5,6 +5,7 @@ https://www.sasayaki-mvmt.com/play
 A rhythm game where you touch the squares before they disappear... WITHOUT A MOUSE!
 Instead of a mouse, you move your cursor using your hands based on whatever item you choose!
 You can use a towel...
+
 ![image](https://user-images.githubusercontent.com/50351133/131236598-23aabf6d-0065-4a14-8404-8b914600518c.png)
 
 A glove...
