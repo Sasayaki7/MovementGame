@@ -69,7 +69,8 @@ def get_json():
     file = open(f'{path}{request.form["filename"]}')
     data = json.load(file)
     file.close()
-    return data
+    #return data
+    return "Record not found", 400
 
 
 
