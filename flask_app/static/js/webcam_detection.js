@@ -114,8 +114,9 @@ function getSong(){
     .then(response => response.json())
     .then(data => {
     songScoreDisplay.innerHTML=data['score'] ? data['score']: 0;
-    document.querySelector('#fileform input').setAttribute('value', `/${data['sequence_file']}`);
-    fetchSequence();
+    // document.querySelector('#fileform input').setAttribute('value', `/${data['sequence_file']}`);
+    // fetchSequence();
+    sequence = jsonOfSongs[data['sequence_file']]
     songlabel.innerHTML = data['name'];
     musicSource.setAttribute('src', `${musicRootURL}${data['url']}`);
     myMusic.load();
