@@ -64,14 +64,16 @@ def login():
 
 @app.route('/fetch-sequence', methods=['POST'])
 def get_json():
-    return "Record not found", 400
-    path = pathlib.PurePath(__file__).parent.parent
+    print({request.form["filename"]})
 
+    print(15)
+    path = pathlib.PurePath(__file__).parent.parent
+    print(20)
     path = path.joinpath('static/sequence-obj/')
     file = open(f'{path}{request.form["filename"]}')
     data = json.load(file)
     file.close()
-    #return data
+    return data
 
 
 
